@@ -20,7 +20,6 @@ def browser(request):
         options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
         print("\nstart chrome browser for test..")
         browser = webdriver.Chrome(options=options)
-        browser.implicitly_wait(5)
     elif browser_name == "firefox":
         fp = webdriver.FirefoxProfile()
         fp.set_preference("intl.accept_languages", user_language)
@@ -28,7 +27,6 @@ def browser(request):
         #browser = webdriver.Firefox() doesn't work without binary
         binary = FirefoxBinary(r'C:\Program Files\Mozilla Firefox\firefox.exe')
         browser = webdriver.Firefox(firefox_binary=binary,firefox_profile=fp)
-        browser.implicitly_wait(5)
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")
     yield browser
