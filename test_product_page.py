@@ -1,7 +1,7 @@
 from .pages.main_page import MainPage
 from .pages.login_page import LoginPage
 
-def test_guest_should_see_login_link(browser):
+def test_guest_can_add_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/"
     page = MainPage(browser, link)
     page.open()
