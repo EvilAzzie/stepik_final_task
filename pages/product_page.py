@@ -1,14 +1,35 @@
 from .base_page import BasePage
-from .locators import MainPageLocators
+from .locators import ProductPageLocators
+from selenium.common.exceptions import NoAlertPresentException
+import math
 
-class MainPage(BasePage):
-    def go_to_login_page(self):
-       login_link = self.browser.find_element(*MainPageLocators.LOGIN_LINK)
-       login_link.click()
+class ProductPage(BasePage):
+    
+    def add_product_to_basket(self):
+        basket_button = self.browser.find_element(*ProductPageLocators.BASKET_BUTTON)
+        basket_button.click()
 
-    def should_be_login_link(self):
-        assert self.is_element_present(*MainPageLocators.LOGIN_LINK), "Login link is not presented"
+    def solve_quiz_and_get_code(self):
+        alert = self.browser.switch_to.alert
+        x = alert.text.split(" ")[2]
+        answer = str(math.log(abs((12*math.sin(float(x))))))
+        alert.send_keys(answer)
+        alert.accept()
+        try:
+            alert = self.browser.switch_to.alert
+            alert_text = alert.text
+            print(f"Your code: {alert_text}")
+            alert.accept()
+        except NoAlertPresentException:
+            print("No second alert presented")
+    
+    def right_product_price(self):
+        price_product = self.browser.find_element(*ProductPageLocators.PRICE_PRODUCT)
+        price_product_in_basket = self.browser.find_element(*ProductPageLocators.PRICE_PRODUCT_IN_BASKET)
+        assert price_product.text==price_product_in_basket.text, "product prices don't match"
 
-    def go_to_login_page(self):
-        link = self.browser.find_element(*MainPageLocators.LOGIN_LINK)
-        link.click() 
+    def right_product_name(self):
+        name_product = self.browser.find_element(*ProductPageLocators.NAME_PRODUCT)
+        name_product_in_basket = self.browser.find_element(*ProductPageLocators.NAME_PRODUCT_IN_BASKET)
+        assert name_product.text==name_product_in_basket.text, "product names don't match"
+
